@@ -4,6 +4,10 @@
 
 [这里]:https://smartjinyu.com/android/2017/02/09/mybookshelf.html
 
+由于豆瓣API失效无法获取图书信息，尝试修改为[网上找到的一个api]
+
+[网上找到的一个api]:https://jike.xyz/api/isbn.html
+
 <!-- ### Update September 2020
 
 Due to the changes on Douban API recently , cururently Bookshelf cannot retrieve data from douban.com. Sorry for the inconvenience.  -->
