@@ -60,6 +60,9 @@ public class BookCursorWrapper extends CursorWrapper {
         } else {
             hasCover = true;
         }
+        String readPage = getString(getColumnIndex(BookDBSchema.BookTable.Cols.READ_PAGE));
+        String totalPage = getString(getColumnIndex(BookDBSchema.BookTable.Cols.TOTAL_PAGE));
+
         //
         int readingStatus = getInt(getColumnIndex(BookDBSchema.BookTable.Cols.READING_STATUS));
         String bookShelfId = getString(getColumnIndex(BookDBSchema.BookTable.Cols.BOOKSHELF_ID));
@@ -83,6 +86,8 @@ public class BookCursorWrapper extends CursorWrapper {
         book.setIsbn(isbn);
         book.setHasCover(hasCover);
         book.setReadingStatus(readingStatus);
+        book.setReadPage(readPage);
+        book.setTotalPage(totalPage);
         book.setBookshelfID(UUID.fromString(bookShelfId));
         book.setNotes(notes);
         book.setWebsite(website);

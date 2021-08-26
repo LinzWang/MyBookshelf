@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -112,10 +113,12 @@ public class BatchListFragment extends Fragment {
         private TextView mTitleTextView;
         private TextView mPublisherTextView;
         private TextView mPubtimeTextView;
+        private ProgressBar mProgressBarView;
         private RelativeLayout mRelativeLayout;
 
         public BookHolder(View itemView) {
             super(itemView);
+            mProgressBarView = (ProgressBar)itemView.findViewById(R.id.book_read_pb);
             mCoverImageView = (ImageView) itemView.findViewById(R.id.list_cover_image_view);
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_title_text_view);
             mPublisherTextView = (TextView) itemView.findViewById(R.id.list_publisher_text_view);
@@ -155,6 +158,9 @@ public class BatchListFragment extends Fragment {
                 }
                 pubDate.append(month + 1);
             }
+            //Log.i(TAG,"getReadPage is:"+book.getReadPage()+", getTotalPage:"+book.getTotalPage());
+            mProgressBarView.setVisibility(View.GONE);
+
 
             mPubtimeTextView.setText(pubDate);
             mRelativeLayout.setBackgroundColor(Color.WHITE);

@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -50,7 +51,6 @@ import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
 import id.zelory.compressor.FileUtil;
-
 
 /**
  * Created by smartjinyu on 2017/1/19.
@@ -80,6 +80,8 @@ public class BookEditActivity extends AppCompatActivity {
     private EditText pubyearEditText;
     private EditText pubmonthEditText;
     private EditText isbnEditText;
+    private EditText readEditText;
+    private EditText totalEditText;
     private ImageView coverImageView;
     private Spinner readingStatusSpinner;
     private Spinner bookshelfSpinner;
@@ -88,7 +90,7 @@ public class BookEditActivity extends AppCompatActivity {
     private EditText websiteEditText;
     private LinearLayout translator_layout;
     private TextView detailBarTextView;
-
+    private RelativeLayout pageinfoLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,12 +126,24 @@ public class BookEditActivity extends AppCompatActivity {
         }
         setCoverChange();
 
-
+        pageinfoLayout =(RelativeLayout)findViewById(R.id.page_info_layout);
+        if(mBook.getReadingStatus() == 2){
+            pageinfoLayout.setVisibility(View.VISIBLE);
+        }else{
+            pageinfoLayout.setVisibility(View.GONE);
+        }
         notesEditText = (EditText) findViewById(R.id.book_notes_edit_text);
         if (mBook.getNotes() != null) {
             notesEditText.setText(mBook.getNotes());
         }
-
+        readEditText = (EditText)findViewById(R.id.book_rp_edit_text);
+        if(mBook.getReadPage() != null){
+            readEditText.setText(mBook.getReadPage());
+        }
+        totalEditText = (EditText)findViewById(R.id.book_tp_edit_text);
+        if(mBook.getTotalPage() != null){
+            totalEditText.setText(mBook.getTotalPage());
+        }
         websiteEditText = (EditText) findViewById(R.id.book_website_edit_text);
         if (mBook.getWebsite() != null) {
             websiteEditText.setText(mBook.getWebsite());
@@ -233,6 +247,8 @@ public class BookEditActivity extends AppCompatActivity {
             mBook.setIsbn(isbnEditText.getText().toString());
             mBook.setNotes(notesEditText.getText().toString());
             mBook.setWebsite(websiteEditText.getText().toString());
+            mBook.setReadPage(readEditText.getText().toString());
+            mBook.setTotalPage(totalEditText.getText().toString()!=""?totalEditText.getText().toString():"0");
             BookLab bookLab = BookLab.get(this);
             bookLab.addBook(mBook);
             return true;
@@ -267,7 +283,7 @@ public class BookEditActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (!BookLab.get(BookEditActivity.this).isBookExists(mBook)) {
+                        if (!BookLab.get(com.smartjinyu.mybookshelf.BookEditActivity.this).isBookExists(mBook)) {
                             // discard a newly added book
                             if (mBook.isHasCover()) {
                                 // delete the redundant cover file
@@ -321,7 +337,7 @@ public class BookEditActivity extends AppCompatActivity {
         labelsEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(BookEditActivity.this)
+                new MaterialDialog.Builder(com.smartjinyu.mybookshelf.BookEditActivity.this)
                         .title(R.string.label_choice_dialog_title)
                         .items(labels)
                         .itemsCallbackMultiChoice(selectedItemIndex,
@@ -364,7 +380,7 @@ public class BookEditActivity extends AppCompatActivity {
                             @Override
                             public void onClick(@NonNull final MaterialDialog multiChoiceDialog, @NonNull DialogAction which) {
                                 // create new label
-                                new MaterialDialog.Builder(BookEditActivity.this)
+                                new MaterialDialog.Builder(com.smartjinyu.mybookshelf.BookEditActivity.this)
                                         .title(R.string.label_add_new_dialog_title)
                                         .inputRange(1, getResources().getInteger(R.integer.label_name_max_length))
                                         .input(
@@ -493,7 +509,7 @@ public class BookEditActivity extends AppCompatActivity {
                 String selectedName = selectedBS.toString();
                 if (selectedName.equals(getResources().getString(R.string.custom_spinner_item))) {
                     Log.i(TAG, "Custom Bookshelf clicked");
-                    MaterialDialog inputDialog = new MaterialDialog.Builder(BookEditActivity.this)
+                    MaterialDialog inputDialog = new MaterialDialog.Builder(com.smartjinyu.mybookshelf.BookEditActivity.this)
                             .title(R.string.custom_book_shelf_dialog_title)
                             .inputRange(1, getResources().getInteger(R.integer.bookshelf_name_max_length))
                             .input(R.string.custom_book_shelf_dialog_edit_text, 0, new MaterialDialog.InputCallback() {
@@ -557,6 +573,29 @@ public class BookEditActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mBook.setReadingStatus(i);
+                if(i == 2){
+                    pageinfoLayout.setVisibility(View.VISIBLE);
+                }else{
+                    pageinfoLayout.setVisibility(View.GONE);
+                }
+                switch (i) {
+                    case 0:
+
+                        mBook.setReadPage("0");
+                        break;
+                    case 1:
+                        mBook.setReadPage("0");
+                        break;
+                    case 2:
+                        //mBook.setReadPage(readEditText.getText().toString()!=""?readEditText.getText().toString():"0");
+                        break;
+                    case 3:
+                        mBook.setReadPage(mBook.getTotalPage());
+                        break;
+                    default:
+                        mBook.setReadPage("0");
+                        break;
+                }
                 Log.i(TAG, "Click and set Reading status " + i);
             }
 
@@ -583,7 +622,7 @@ public class BookEditActivity extends AppCompatActivity {
                 logEvents.put("Cover", "Change Cover Manually");
                 Analytics.trackEvent(TAG, logEvents);
 
-                new MaterialDialog.Builder(BookEditActivity.this)
+                new MaterialDialog.Builder(com.smartjinyu.mybookshelf.BookEditActivity.this)
                         .title(R.string.cover_change_dialog_title)
                         .items(R.array.cover_change_dialog_list)
                         .itemsCallback(new MaterialDialog.ListCallback() {
@@ -595,9 +634,9 @@ public class BookEditActivity extends AppCompatActivity {
                                     logEvents.put("Cover", "Choose Take New Picture");
                                     Analytics.trackEvent(TAG, logEvents);
 
-                                    if (ContextCompat.checkSelfPermission(BookEditActivity.this, Manifest.permission.CAMERA)
+                                    if (ContextCompat.checkSelfPermission(com.smartjinyu.mybookshelf.BookEditActivity.this, Manifest.permission.CAMERA)
                                             != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(BookEditActivity.this,
+                                        ActivityCompat.requestPermissions(com.smartjinyu.mybookshelf.BookEditActivity.this,
                                                 new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION);
                                     } else {
                                         takePictureIntent();
@@ -614,7 +653,7 @@ public class BookEditActivity extends AppCompatActivity {
                                         startActivityForResult(i, REQUEST_CHOOSE_IMAGE);
                                     } else {
                                         Log.e(TAG, "No Image chooser available");
-                                        Toast.makeText(BookEditActivity.this, R.string.cover_change_no_choose_picture_app, Toast.LENGTH_LONG)
+                                        Toast.makeText(com.smartjinyu.mybookshelf.BookEditActivity.this, R.string.cover_change_no_choose_picture_app, Toast.LENGTH_LONG)
                                                 .show();
                                     }
 
@@ -643,7 +682,7 @@ public class BookEditActivity extends AppCompatActivity {
             }
         } else {
             Log.e(TAG, "Camera App Not Installed");
-            Toast.makeText(BookEditActivity.this, getString(R.string.cover_change_no_camera_app), Toast.LENGTH_LONG)
+            Toast.makeText(com.smartjinyu.mybookshelf.BookEditActivity.this, getString(R.string.cover_change_no_camera_app), Toast.LENGTH_LONG)
                     .show();
         }
     }
@@ -681,7 +720,7 @@ public class BookEditActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_PERMISSION:
                 if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    Toast.makeText(BookEditActivity.this, getString(R.string.cover_change_camera_permission_denied),
+                    Toast.makeText(com.smartjinyu.mybookshelf.BookEditActivity.this, getString(R.string.cover_change_camera_permission_denied),
                             Toast.LENGTH_LONG)
                             .show();
                 } else {
@@ -690,7 +729,7 @@ public class BookEditActivity extends AppCompatActivity {
         }
     }
 
-    private void compressCustomCover(File imageFile) {
+    private void compressCustomCover(File imageFile) throws IOException {
         new Compressor.Builder(this)
                 .setMaxHeight(450)
                 .setMaxWidth(400)
@@ -713,11 +752,16 @@ public class BookEditActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             if (customPhotoName == null) {
                 Log.e(TAG, "Error when taking a new picture");
-                Toast.makeText(BookEditActivity.this, getString(R.string.cover_change_fail), Toast.LENGTH_LONG)
+                Toast.makeText(com.smartjinyu.mybookshelf.BookEditActivity.this, getString(R.string.cover_change_fail), Toast.LENGTH_LONG)
                         .show();
             } else {
+                Log.i(TAG,"customphotoname"+customPhotoName);
                 File imageFile = new File(customPhotoName);
-                compressCustomCover(imageFile);
+                try {
+                    compressCustomCover(imageFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 boolean succeed = imageFile.delete();
                 Log.i(TAG, "Delete camera image result = " + succeed);
@@ -727,14 +771,14 @@ public class BookEditActivity extends AppCompatActivity {
         } else if (requestCode == REQUEST_CHOOSE_IMAGE && resultCode == RESULT_OK) {
             if (data == null) {
                 Log.e(TAG, "Error when choosing a picture");
-                Toast.makeText(BookEditActivity.this, getString(R.string.cover_change_fail), Toast.LENGTH_LONG)
+                Toast.makeText(com.smartjinyu.mybookshelf.BookEditActivity.this, getString(R.string.cover_change_fail), Toast.LENGTH_LONG)
                         .show();
             } else {
                 try {
                     File imageFile = FileUtil.from(this, data.getData());
                     compressCustomCover(imageFile);
                 } catch (IOException ioe) {
-                    Toast.makeText(BookEditActivity.this, getString(R.string.cover_change_fail), Toast.LENGTH_LONG)
+                    Toast.makeText(com.smartjinyu.mybookshelf.BookEditActivity.this, getString(R.string.cover_change_fail), Toast.LENGTH_LONG)
                             .show();
                     Log.e(TAG, "FileUtil.from ioe = " + ioe.toString());
                 }

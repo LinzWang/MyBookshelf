@@ -50,6 +50,9 @@ public class BookDetailActivity extends SlidingActivity {
     private TextView pubtimeTextView;
     private RelativeLayout isbnRelativeLayout;
     private TextView isbnTextView;
+    private TextView readTextView;
+    private TextView markTextView;
+    private TextView totalTextView;
     private RelativeLayout readingStatusRelativeLayout;
     private TextView readingStatusTextView;
     private RelativeLayout bookshelfRelativeLayout;
@@ -68,6 +71,7 @@ public class BookDetailActivity extends SlidingActivity {
         // Intent will pass in savedInstanceState
         Intent intent = getIntent();
         mBook = (Book) intent.getSerializableExtra(Intent_Book_ToEdit);
+        assert mBook != null;
         setTitle(mBook.getTitle());
         setPrimaryColors(
                 ContextCompat.getColor(this, R.color.colorPrimary),
@@ -120,6 +124,7 @@ public class BookDetailActivity extends SlidingActivity {
         pubtimeTextView = (TextView) findViewById(R.id.book_info_pubtime_text_view);
         isbnRelativeLayout = (RelativeLayout) findViewById(R.id.book_info_isbn_item);
         isbnTextView = (TextView) findViewById(R.id.book_info_isbn_text_view);
+        //readTextView = (TextView) findViewById(R.id.)
         infoTitleTextView = (TextView) findViewById(R.id.book_info_title_bar_text_view);
 
         final ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -250,6 +255,9 @@ public class BookDetailActivity extends SlidingActivity {
     private void setBookDetails() {
         readingStatusRelativeLayout = (RelativeLayout) findViewById(R.id.book_detail_reading_status_item);
         readingStatusTextView = (TextView) findViewById(R.id.book_detail_reading_status_text_view);
+        readTextView = (TextView)findViewById(R.id.book_info_read);
+        totalTextView = (TextView)findViewById(R.id.book_info_total);
+        markTextView = (TextView)findViewById(R.id.book_read_mark);
         bookshelfRelativeLayout = (RelativeLayout) findViewById(R.id.book_detail_bookshelf_item);
         bookshelfTextView = (TextView) findViewById(R.id.book_detail_bookshelf_text_view);
         notesRelativeLayout = (RelativeLayout) findViewById(R.id.book_detail_notes_item);
@@ -272,7 +280,17 @@ public class BookDetailActivity extends SlidingActivity {
         });
         String[] readingStatus = getResources().getStringArray(R.array.reading_status_array);
         readingStatusTextView.setText(readingStatus[mBook.getReadingStatus()]);
-
+        if(mBook.getReadingStatus() == 2){
+            readTextView.setVisibility(View.VISIBLE);
+            totalTextView.setVisibility(View.VISIBLE);
+            markTextView.setVisibility(View.VISIBLE);
+            readTextView.setText(mBook.getReadPage());
+            totalTextView.setText(mBook.getTotalPage());
+        }else{
+            readTextView.setVisibility(View.GONE);
+            totalTextView.setVisibility(View.GONE);
+            markTextView.setVisibility(View.GONE);
+        }
         bookshelfRelativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {

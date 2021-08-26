@@ -19,6 +19,8 @@ public class BookDBSchema {
             public static final String PUB_TIME = "pubtime";
             public static final String ADD_TIME = "addtime";
             public static final String ISBN = "isbn";
+            public static final String TOTAL_PAGE = "totalpage";
+            public static final String READ_PAGE = "readpage";
             public static final String HAS_COVER = "hascover";
             public static final String READING_STATUS = "readingstatus";
             public static final String BOOKSHELF_ID = "bookshelfID";

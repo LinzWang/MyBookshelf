@@ -48,6 +48,8 @@ public class BookLab {
         ContentValues values = new ContentValues();
         values.put(BookDBSchema.BookTable.Cols.TITLE, book.getTitle());
         values.put(BookDBSchema.BookTable.Cols.UUID, book.getId().toString());
+        values.put(BookDBSchema.BookTable.Cols.READ_PAGE, book.getReadPage());
+        values.put(BookDBSchema.BookTable.Cols.TOTAL_PAGE, book.getTotalPage());
         //authors
         Gson gson = new Gson();
         String authors = gson.toJson(book.getAuthors());

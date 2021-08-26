@@ -39,6 +39,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -251,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        assert dialog.getInputEditText() != null;
                                         String newName = dialog.getInputEditText().getText().toString();
                                         BookShelfLab.get(MainActivity.this).renameBookShelf(selectedBS.getId(), newName);
                                         setBookShelfSpinner(mSpinner.getSelectedItemPosition());
@@ -324,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                     @Override
                                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        assert dialog.getInputEditText() != null;
                                         String newName = dialog.getInputEditText().getText().toString();
                                         LabelLab.get(MainActivity.this).renameLabel(selectedLB.getId(), newName);
                                         setDrawer(mDrawer.getCurrentSelection());
@@ -499,6 +502,7 @@ public class MainActivity extends AppCompatActivity {
                                         @Override
                                         public void onClick(@NonNull MaterialDialog inputDialog, @NonNull DialogAction which) {
                                             Label labelToAdd = new Label();
+                                            assert inputDialog.getInputEditText() != null;
                                             labelToAdd.setTitle(inputDialog.getInputEditText().getText().toString());
                                             LabelLab.get(MainActivity.this).addLabel(labelToAdd);
                                             Log.i(TAG, "New label created " + labelToAdd.getTitle());
@@ -617,7 +621,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             // hide/display float action button automatically
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) {
                     if (!mActionAddButton.isMenuButtonHidden()) {
                         Log.d(TAG, "Hide FAM 3");
@@ -677,10 +681,12 @@ public class MainActivity extends AppCompatActivity {
         private TextView mTitleTextView;
         private TextView mPublisherTextView;
         private TextView mPubtimeTextView;
+        private ProgressBar mProgressBarView;
         private RelativeLayout mRelativeLayout;
 
         public BookHolder(View itemView) {
             super(itemView);
+            mProgressBarView = (ProgressBar)itemView.findViewById(R.id.book_read_pb);
             mCoverImageView = (ImageView) itemView.findViewById(R.id.list_cover_image_view);
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_title_text_view);
             mPublisherTextView = (TextView) itemView.findViewById(R.id.list_publisher_text_view);
@@ -719,6 +725,22 @@ public class MainActivity extends AppCompatActivity {
                     pubDate.append("0");
                 }
                 pubDate.append(month + 1);
+            }
+            // Log.i(TAG,"readpage:"+book.getReadPage()+",totalpage:"+book.getTotalPage());
+            if(book.getReadingStatus()==2){
+                if(!book.getReadPage().isEmpty()  && !book.getTotalPage().isEmpty()){
+                    int readed = Integer.parseInt(book.getReadPage());
+                    int total = Integer.parseInt(book.getTotalPage());
+                    int progress = (total>0)?(readed*100)/total:0;
+                    mProgressBarView.setProgress(progress);
+                    //Log.i(TAG,"progress is:"+progress);
+                }else{
+                    mProgressBarView.setProgress(0);
+                }
+            }else if(book.getReadingStatus()==3){
+                mProgressBarView.setProgress(100);
+            }else{
+                mProgressBarView.setProgress(0);
             }
 
             mPubtimeTextView.setText(pubDate);
@@ -764,7 +786,7 @@ public class MainActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
             if (viewType == TYPE_ITEM) {
                 View view = layoutInflater.inflate(R.layout.item_booklist_recyclerview, parent, false);
@@ -1096,7 +1118,7 @@ public class MainActivity extends AppCompatActivity {
                                     // and select the newly add label won't take effect
                                     for (int i = 0; i < which.length; i++) {
                                         for (Label label : labels) {
-                                            if (label.getTitle().equals(text[i])) {
+                                            if (label.getTitle().contentEquals(text[i])) {
                                                 // selected label
                                                 for (Book book : multiSelectList) {
                                                     book.addLabel(label);
@@ -1138,6 +1160,7 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(@NonNull MaterialDialog inputDialog, @NonNull DialogAction which) {
                                                     Label labelToAdd = new Label();
+                                                    assert inputDialog.getInputEditText() != null;
                                                     labelToAdd.setTitle(inputDialog.getInputEditText().getText().toString());
                                                     labelLab.addLabel(labelToAdd);
                                                     Log.i(TAG, "New label created " + labelToAdd.getTitle());
@@ -1220,9 +1243,11 @@ public class MainActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                                     BookShelf bookShelfToAdd = new BookShelf();
+                                                    assert dialog.getInputEditText() != null;
                                                     bookShelfToAdd.setTitle(dialog.getInputEditText().getText().toString());
                                                     bookShelfLab.addBookShelf(bookShelfToAdd);
                                                     Log.i(TAG, "New bookshelf created " + bookShelfToAdd.getTitle());
+                                                    assert listdialog.getItems() != null;
                                                     listdialog.getItems().add(bookShelfToAdd.toString());
                                                     listdialog.notifyItemInserted(listdialog.getItems().size() - 1);
                                                 }
@@ -1304,7 +1329,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         if (mDrawer != null) {
             savedInstanceState.putLong(drawerSelected, mDrawer.getCurrentSelection());

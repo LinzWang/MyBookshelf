@@ -146,7 +146,7 @@ public class BatchAddActivity extends AppCompatActivity {
                     public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                         List<BookShelf> bookShelves = bookShelfLab.getBookShelves();
                         for (BookShelf bookShelf : bookShelves) {
-                            if (bookShelf.toString().equals(text)) {
+                            if (bookShelf.toString().contentEquals(text)) {
                                 // selected bookshelf
                                 for (Book book : mBooks) {
                                     book.setBookshelfID(bookShelf.getId());
@@ -219,7 +219,7 @@ public class BatchAddActivity extends AppCompatActivity {
                         // and select the newly add label won't take effect
                         for (int i = 0; i < which.length; i++) {
                             for (Label label : labels) {
-                                if (label.getTitle().equals(text[i])) {
+                                if (label.getTitle().contentEquals(text[i])) {
                                     // selected label
                                     for (Book book : mBooks) {
                                         book.addLabel(label);
@@ -346,12 +346,12 @@ public class BatchAddActivity extends AppCompatActivity {
             mBook.setHasCover(false);
         }
     }
-
+    /**
+     * event = 0, unexpected response code
+     * event = 1, request failed
+     */
     public void fetchFailed(int fetcherID, int event, String isbn) {
-        /**
-         * event = 0, unexpected response code
-         * event = 1, request failed
-         */
+
 
         indexOfServiceTested += 1;
         if (indexOfServiceTested < selectedServices.length) {
@@ -440,14 +440,13 @@ public class BatchAddActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] results) {
-        switch (requestCode) {
-            case CAMERA_PERMISSION:
-                if (!(results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED)) {
-                    Toast.makeText(this, R.string.camera_permission_denied, Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Camera Permission Denied");
-                    finish();
-                }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] results) {
+        if (requestCode == CAMERA_PERMISSION) {
+            if (!(results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(this, R.string.camera_permission_denied, Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Camera Permission Denied");
+                finish();
+            }
         }
     }
 

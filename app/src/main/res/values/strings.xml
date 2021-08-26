@@ -187,6 +187,8 @@
     <string name="book_info_isbn_image_view">ISBN</string>
     <string name="book_info_isbn_toast">ISBN copied to clipboard!</string>
     <string name="book_info_isbn_clipboard_content">ISBN: %1$s</string>
+    <string name="book_rp_edit_text_hint">Readed</string>
+    <string name="book_tp_edit_text_hint">Total</string>
     <string name="book_detail_title">Details</string>
     <string name="book_detail_header_text_view">Easter Egg: You add this book at</string>
     <string name="book_detail_menu_delete">Delete Book</string>

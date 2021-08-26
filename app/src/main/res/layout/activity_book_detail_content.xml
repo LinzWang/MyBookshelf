@@ -226,11 +226,38 @@
                     android:id="@+id/book_detail_reading_status_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="大金鱼是天才"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimaryText"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="72dp"
-                    android:layout_centerVertical="true" />
+                    android:text="大金鱼是天才"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/book_info_read"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_toEndOf="@id/book_detail_reading_status_text_view"
+                    android:text="@string/book_rp_edit_text_hint" />
+
+                <TextView
+                    android:id="@+id/book_info_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/book_read_mark"
+                    android:text="@string/book_tp_edit_text_hint" />
+
+                <TextView
+                    android:id="@+id/book_read_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/book_info_read"
+                    android:text="/" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -253,11 +280,11 @@
                     android:id="@+id/book_detail_bookshelf_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="大金鱼是天才"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimaryText"
+                    android:layout_centerVertical="true"
                     android:layout_marginStart="72dp"
-                    android:layout_centerVertical="true" />
+                    android:text="大金鱼是天才"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp" />
             </RelativeLayout>
 
             <RelativeLayout

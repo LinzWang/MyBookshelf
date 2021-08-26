@@ -32,6 +32,8 @@ public class Book implements Serializable {
     private Calendar addTime;// Time the book add to bookshelf
     private String isbn;
     private boolean hasCover;
+    private String totalPage;
+    private String readPage;
     private int readingStatus;
     /**
      * 0 represents not set
@@ -157,6 +159,10 @@ public class Book implements Serializable {
         this.bookshelfID = bookshelfID;
     }
 
+    public String getTotalPage(){return totalPage;}
+    public void setTotalPage(String totalPage){this.totalPage = totalPage;}
+    public String getReadPage(){return readPage;}
+    public void setReadPage(String readPage){this.readPage = readPage;}
     /**
      *
      * @return 0 unset, 1 unread, 2 reading, 3 finished

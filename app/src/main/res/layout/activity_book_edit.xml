@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -60,6 +61,51 @@
                         style="@style/Widget.AppCompat.Spinner.Underlined"
                         android:layout_alignParentTop="true"
                         android:layout_toEndOf="@+id/book_edit_readingstatus_image_view" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/page_info_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+
+                    <EditText
+                        android:id="@+id/book_rp_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="false"
+                        android:layout_alignParentEnd="false"
+                        android:layout_alignParentBottom="false"
+                        android:layout_marginStart="46dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="@string/book_rp_edit_text_hint"
+                        android:inputType="number"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:textSize="16sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <EditText
+                        android:id="@+id/book_tp_edit_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="false"
+
+
+                        android:layout_alignParentBottom="false"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@id/book_rp_edit_text"
+                        android:hint="@string/book_tp_edit_text_hint"
+                        android:inputType="number"
+                        android:textSize="16sp" />
+
 
                 </RelativeLayout>
 
